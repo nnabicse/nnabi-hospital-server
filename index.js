@@ -17,6 +17,9 @@ async function run() {
     try {
         await client.connect()
         const serviceCollection = client.db('nnabi-hospital').collection('services');
+        const bookingCollection = client.db('nnabi-hospital').collection('bookings');
+
+
 
         app.get('/service', async (req, res) => {
             const query = {};
@@ -24,6 +27,18 @@ async function run() {
             const services = await cursor.toArray();
             res.send(services);
         })
+
+
+        app.post('/booking', async (req, res) => {
+            const booking = req.body;
+            const query = {treatment: booking.treatment, date:booking.date, patient: booking.patient}
+            const result = await bookingCollection.insertOne(booking);
+            res.send(result);
+        })
+
+
+
+
 
     }
     finally {
