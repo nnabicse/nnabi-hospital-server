@@ -18,6 +18,7 @@ async function run() {
         await client.connect()
         const serviceCollection = client.db('nnabi-hospital').collection('services');
         const bookingCollection = client.db('nnabi-hospital').collection('bookings');
+        const usersCollection = client.db('nnabi-hospital').collection('users');
 
 
 
@@ -28,6 +29,19 @@ async function run() {
             res.send(services);
         })
 
+        app.put('/user/:email', async (req, res) => {
+            const email = req.params.email;
+            const filter = { email: email };
+            const user = req.body;
+            const options = { upsert: true };
+            const updateDoc = {
+                $set: user
+            };
+
+            const result = await usersCollection.updateOne(filter, updateDoc, options)
+            res.send(result);
+
+        })
 
         app.get('/available', async (req, res) => {
             const date = req.query.date;
