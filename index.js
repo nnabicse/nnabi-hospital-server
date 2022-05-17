@@ -55,6 +55,13 @@ async function run() {
 
 
 
+        app.get('/doctor', verifyJWT, verifyAdmin, async (req, res) => {
+            const doctors = await doctorsCollection.find().toArray();
+            res.send(doctors);
+        })
+
+
+
         app.get('/service', async (req, res) => {
             const query = {};
             const cursor = serviceCollection.find(query).project({ name: 1 });
