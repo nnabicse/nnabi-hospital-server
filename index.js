@@ -59,6 +59,12 @@ async function run() {
             const doctors = await doctorsCollection.find().toArray();
             res.send(doctors);
         })
+        app.delete('/doctor/:email', verifyJWT, verifyAdmin, async (req, res) => {
+            const email = req.params.email;
+            const query = { email: email }
+            const result = await doctorsCollection.deleteOne(query);
+            res.send(result);
+        })
 
 
 
